@@ -16,7 +16,7 @@ public:
     int decRefCnt() {
     }
 };*/
-/**!
+/**
  *  Publikus interface a referenciszámolt objektumokhoz
  * */
 class refCounted {
@@ -24,16 +24,15 @@ private:
     int count; // Reference count
 
 public:
-    //! metódus a pRefernce számának a növeléséhez
-    /*!
+    /** metódus a pRefernce számának a növeléséhez
      * vissza is adja ezt az értéket, miután megnövelte
      * */
     void incRefCnt() {
         // Increment the pReference count
         count++;
     }
-    //! metódus a pReference számának a csökkentéséhez
-    /*!
+    /** metódus a pReference számának a csökkentéséhez
+     *
      * vissza is adja ezt az értéket, miután csökkentette
      * */
     int decRefCnt() {
@@ -44,9 +43,7 @@ public:
 };
 
 
-/*! my_pointer template class */
-/*!
- * 'Okos' pointer megvalósítása
+/** my_pointer template class - 'okos' pointer megvalósítás
  * */
 template<class T>
 class my_pointer{
@@ -56,8 +53,9 @@ private:
     refCounted *pReference; /**< referencia számláló */
 
 public:
-    //! Constructor
-    /*!
+
+    /** Constructor
+     *
      * Létrehozunk egy új pReference-t
      * Majd növeljük
      */
@@ -66,8 +64,8 @@ public:
         pReference->incRefCnt();
     }
 
-    //! Paraméteres constructor
-    /*!
+    /**Paraméteres constructor
+     *
      * Létrehozunk egy új pReference-t
      * Majd növeljük
      */
@@ -76,16 +74,16 @@ public:
         pReference->incRefCnt();
     }
 
-    //! Copy constructor
-    /*!
+    /** Copy constructor
+     *
      * lemásolja a pData és pReference pointer-t
      * utána növeli a pReference számát
      */
     my_pointer(const my_pointer<T> &myPointer) : pData(myPointer.pData), pReference(myPointer.pReference) {
         pReference->incRefCnt();
     }
-    //! Destructor
-    /*!
+    /** Destructor
+     *
      * Okos pointernek nincs alapértelmezetten destruktora,
      * viszont az okos pointernek lesz és ő végzi a memória felszabadítást
      *
@@ -95,46 +93,46 @@ public:
     ~my_pointer() {
         if (pReference->decRefCnt() == 0) {
             delete pData;
+            pData = nullptr;
             delete pReference;
+            pReference = nullptr;
         }
     }
 
-
-     //! Dereferencing operator (*)
+     /** Dereferencing operator (*)
+     *
+     *  @return
+     */
      T &operator*() {
         return *pData;
     }
-/*
-    T operator&(){
-        return this;
-    }*/
 
-    //! Indirection operator
-    /*!
+    /** Indirection operator
+     *
      *  metódusainak az eléréséhez
      *  @return T-re mutató pointer
-     * */
+     */
     T *operator->() {
-        return pData != 0 ? pData : 0;
+        return pData /*!= 0 ? pData : 0*/;
     }
 
-    //!  == operator overloading/túlterhelés
-    /*!
-     * @return bool, hogy megegyezik-e a 2 address
-     * */
+    /**  operator== overloading/túlterhelés
+    *
+    * @return bool, hogy megegyezik-e a 2 address
+    */
     bool operator==(const my_pointer<T> &myPointer){
         return this == &myPointer;
     }
 
-    //!  != operator overloading/túlterhelése
-    /*!
+    /**   operator!= overloading/túlterhelése
+     *
      *  @return bool, nem egyenlő a 2 address
-     * */
+     */
     bool operator!=(const my_pointer<T> &myPointer){
         return this != &myPointer;
     }
 
-    //! = operator (assignment) overloading/túlterhelés
+    /**  operator= (assignment) overloading/túlterhelés*/
     my_pointer<T> &operator=(const my_pointer<T> &myPointer) {
 
         /**Ellenőrizzük, hogy ne saját magának akarjon értéket adni*/
@@ -144,7 +142,9 @@ public:
             /**CSökkentjük a pReference számát és ha 0, akkor memória felszabadítás*/
             if (pReference->decRefCnt() == 0) {
                 delete pData;
+                pData = nullptr;
                 delete pReference;
+                pReference = nullptr;
             }
             /**Lemásoljuk a pData és pReference pointert
             majd növeljük a pReference számát*/
@@ -154,39 +154,38 @@ public:
         }
         return *this;
     }
+
 };
 
 /** nem lesznek beadva*/
 class Person {
     int age;
-    char *pName;
+
 
 public:
 
-    Person() : pName(0), age(0) {
+    Person() : age(0) {
+        cout<< "Person created" <<endl;
     }
 
-    Person(char *pName, int age) : pName(pName), age(age) {
+    Person(int age) :  age(age) {
     }
 
     ~Person() {
-        cout<< "Deleted \n";
+        cout<< "Deleted " << endl;
     }
 
     void Display() {
-        cout << "Name = %s Age = %d \n", pName, age;
+        cout << " Age = " << age << endl;
     }
 
-    void Shout() {
-        cout << "Ooooooooooooooooo";
-    }
 };
 int main() {
 //    my_pointer<refCounted> obj1 = new refCounted();
 //    my_pointer<refCounted> obj2 = obj1;
 
-    my_pointer<Person> p(new Person("Scott", 25));
-
+   my_pointer<Person> p(new Person( 25));
+/*
     my_pointer<Person> ob1 = new Person;
 
     p->Display();
@@ -194,7 +193,6 @@ int main() {
         my_pointer<Person> q = p;
         q->Display();
         // Destructor of q will be called here..
-
         my_pointer<Person> r;
         r = p;
         r->Display();
@@ -205,9 +203,13 @@ int main() {
     p->Display();
 
 
-    cout<< (&p);
+    cout<< (&p);*/
+/*
+    Person *per = new Person( 25);
+    my_pointer<Person> p = per;
+    p->Display();*/
 
-
+    my_pointer<Person> * a = p;
 
     return 0;
 }
