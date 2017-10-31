@@ -1,0 +1,66 @@
+//
+///*
+// * Feladatkiírás
+//
+//A feladat olyan osztálysablon írása, amely hivatkozásszámlálás segítségével
+//megvalósítja az "okos pointert". Az egyes "okos pointer" objektumpéldányok
+//tárolnak egy, a sablonparaméterként kapott típusra (egy referenciaszámlált
+//objektumra) mutató pointert, és "okos pointerek" másolásakor, értékadásakor,
+//megszűnésekor a hivatkozott objektumok hivatkozásszámlálóját megfelelően
+//növelik vagy csökkentik (azaz minden hivatkozott objektum referenciaszámlálója
+//azt tárolja, hogy az adott pillanatban mennyi "okos pointer" mutat rá). Ha egy
+//hivatkozott objektum számlálója nullára csökken, az "okos pointer" az
+//objektumot automatikusan megszünteti így a programozónak nem szükséges explicit
+//delete operátorral megszüntetnie azt).
+//
+//A referenciaszámláló tárolása és az azt módosító függvények biztosítása a
+//hivatkozott típus feladata (tehát nem az "okos pointeré"), míg a megszüntetés
+//az "okos pointeré".
+//
+//Az "okos pointertől" elvárás, hogy értékadás és dereferencia tekintetében
+//kompatibilis legyen az eredeti pointerrel: "okos pointer" létrehozható legyen
+//és értéket is kaphasson másik "okos pointertől", vagy hagyományos pointertől,
+//összehasonlítható legyen egyenlőségre vagy nem-egyenlőségre, konvertálható
+//legyen hagyományos pointerré, dereferálható legyen, és használható legyen a ->
+//operátor.
+//
+//Az osztálysablon publikus interfésze (a sablon neve, sablonparaméterezése, a
+//publikus metódusainak szignatúrája) kötött, azaz legalább az alábbiaknak meg
+//kell felelnie (de amennyiben a feladatkiírás szükségessé teszi további publikus
+//metódusokkal, belső típusokkal bővíthető, valamint az osztály törzsén kívül is
+//szerepelhetnek további típusok, metódusok):
+// *
+// *
+// * */
+//// === MEGVALÓSÍTANDÓ ===
+//
+///**
+// * Az osztálysablon neve my_pointer.
+// * A sablon paraméterezése:
+// *   - T: a hivatkozott objektum típusa
+// */
+//template<class T>
+//class my_pointer {
+//public:
+//    /** A sablonpéldány rendelkezik default konstruktorral. */
+//    my_pointer();
+//};
+//
+//// === MEGVALÓSÍTÁS VÉGE ===
+///**
+// * Minta osztály, ami definiálja azt a publikus interfészt, amivel a
+// * referenciaszámolt típusoknak rendelkezniük kell. Ezt az osztályt a beadott
+// * feladatban nem kell megvalósítani!
+// */
+//class refCounted {
+//public:
+//    /** Megnöveli a hivatkozásszámlálót és visszaadja a számláló új értékét. */
+//    int incRefCnt();
+//    /** Csökkenti a hivatkozásszámlálót és visszaadja a számláló új értékét. */
+//    int decRefCnt();
+//};
+//
+///**
+// * Példa az "okos pointer" egy felhasználására. A beadott feladatban nem szabad
+// * szerepelnie.
+// */
